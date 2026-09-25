@@ -36,7 +36,18 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Ar
 a{color:inherit}
 
 /* HERO */
-.hero{position:relative;background:linear-gradient(135deg,var(--navy2) 0%,var(--navy) 55%,var(--navy3) 100%);color:#fff;overflow:hidden}
+.hero{position:relative;color:#fff;overflow:hidden;background:var(--navy2)}
+.hero-bg{position:absolute;inset:0;background-image:url('hero.jpg');background-size:cover;background-position:center 32%;filter:saturate(.85)}
+.hero-bg::after{content:"";position:absolute;inset:0;background:
+  linear-gradient(105deg,rgba(9,20,38,.94) 0%,rgba(13,30,58,.88) 42%,rgba(19,42,78,.70) 72%,rgba(19,42,78,.55) 100%)}
+@media(max-width:959px){
+  /* On a phone the headline sits straight over the picture, so it needs to be
+     darker still — a hero you cannot read is worse than no hero. */
+  /* Dark enough to read over, light enough that the crash is still visible —
+     at .92 it was a navy rectangle and the photo may as well not be there. */
+  .hero-bg{background-position:58% 28%}
+  .hero-bg::after{background:linear-gradient(180deg,rgba(9,20,38,.55) 0%,rgba(11,25,48,.72) 48%,rgba(13,30,58,.88) 100%)}
+}
 .hero::before{content:"";position:absolute;inset:0;background:
   radial-gradient(ellipse at 15% 20%,rgba(255,255,255,.07),transparent 55%),
   radial-gradient(ellipse at 85% 80%,rgba(216,35,42,.16),transparent 60%);pointer-events:none}
@@ -137,6 +148,7 @@ footer{background:#e9ecf2;padding:26px 20px 30px;font-size:12.5px;color:var(--mu
 <body>
 
 <section class="hero">
+  <div class="hero-bg" role="presentation"></div>
   <div class="hero-in">
     <div>
       <h1>Were You Injured<br>in an Accident?</h1>
