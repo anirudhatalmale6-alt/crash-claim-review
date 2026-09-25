@@ -331,12 +331,13 @@ footer{background:#e9ecf2;padding:26px 20px 30px;font-size:12.5px;color:var(--mu
 <script>
 /* ------------------------------------------------------------------
    CONFIG
-   ENDPOINT stays EMPTY until the Apps Script is deployed. While it is
-   empty the form runs end to end and shows the thank-you screen, but
-   transmits nothing — which is safe for testing and catastrophic if ads
-   are switched on. Fill it in BEFORE spending a penny on traffic.
+   ENDPOINT is live — leads post to the Apps Script, which writes a row to
+   the Google Sheet and emails NOTIFY_EMAIL. Verified with a real browser
+   submission, not just a curl. If this is ever blanked the form still shows
+   the thank-you screen while transmitting nothing, so never leave it empty
+   with ads running.
    ------------------------------------------------------------------ */
-var ENDPOINT    = '';
+var ENDPOINT    = 'https://script.google.com/macros/s/AKfycbzT0d0bSo69_zpTxsVgZKIo5mzMpfEbrvaAYHVdvjI3N6R6fzkwlZrBbitsR66f0PWy/exec';
 var LEAD_SECRET = 'rMxQ7pKd2WvT9sLbE4nHc6Ja';
 
 document.getElementById('leadForm').addEventListener('input', function(){
