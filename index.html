@@ -71,6 +71,17 @@ input:focus,select:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 
 .opts{display:flex;gap:16px;flex-wrap:wrap}
 .opt{display:flex;align-items:center;gap:6px;font-size:14.5px;color:var(--ink);cursor:pointer;font-weight:500}
 .opt input{margin:0;width:17px;height:17px;accent-color:var(--navy);cursor:pointer}
+.fstep{display:none}
+.fstep.on{display:block;animation:fin .22s ease}
+@keyframes fin{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.prog{height:5px;background:#e6eaf1;border-radius:99px;overflow:hidden;margin:0 0 7px}
+.prog>i{display:block;height:100%;width:50%;background:var(--navy);border-radius:99px;transition:width .3s ease}
+.prog-lbl{text-align:center;font-size:12px;font-weight:700;color:var(--muted);margin:0 0 16px;letter-spacing:.2px}
+.back-link{display:inline-block;font-size:13px;color:var(--navy);font-weight:600;text-decoration:none;margin-bottom:12px}
+.back-link:hover{text-decoration:underline}
+.step-note{font-size:14px;color:var(--muted);margin:0 0 14px}
+#nextBtn{background:var(--navy)}
+#nextBtn:hover{background:var(--navy3)}
 .consent{margin:16px 0 4px;padding-top:14px;border-top:1px solid var(--line)}
 .consent-row{display:flex;gap:10px;align-items:flex-start;cursor:pointer;font-weight:400}
 .consent-row input{margin:2px 0 0;width:19px;height:19px;flex:none;accent-color:var(--navy);cursor:pointer}
@@ -142,12 +153,53 @@ footer{background:#e9ecf2;padding:26px 20px 30px;font-size:12.5px;color:var(--mu
       <div id="formWrap">
         <h2>GET YOUR<b>FREE CASE REVIEW</b></h2>
         <p class="sub">Answer a few quick questions to get started.</p>
+        <div class="prog"><i id="progBar"></i></div>
+        <p class="prog-lbl" id="progLbl">Step 1 of 2 &middot; About the accident</p>
         <form id="leadForm" onsubmit="return submitLead(event)" novalidate>
           <!-- TrustedForm writes the certificate URL here. type=hidden also keeps
                third-party pixels away from it, same reason the contact fields
                below are plain inputs with no autocomplete hints. -->
           <input type="hidden" id="xxTrustedFormCertUrl" name="xxTrustedFormCertUrl">
 
+          <div class="fstep on" id="step1">
+          <div class="q"><span>Were you injured in the accident? <span class="req">*</span></span>
+            <div class="opts">
+              <label class="opt"><input type="radio" name="injured" value="Yes" required> Yes</label>
+              <label class="opt"><input type="radio" name="injured" value="No"> No</label>
+              <label class="opt"><input type="radio" name="injured" value="Not sure"> Not sure</label>
+            </div>
+          </div>
+
+          <div class="q"><span>Were you at fault for the accident? <span class="req">*</span></span>
+            <div class="opts">
+              <label class="opt"><input type="radio" name="at_fault" value="Yes" required> Yes</label>
+              <label class="opt"><input type="radio" name="at_fault" value="No"> No</label>
+              <label class="opt"><input type="radio" name="at_fault" value="Not sure"> Not sure</label>
+            </div>
+          </div>
+
+          <div class="q"><span>Did the accident occur within the last 12 months? <span class="req">*</span></span>
+            <div class="opts">
+              <label class="opt"><input type="radio" name="within_12mo" value="Yes" required> Yes</label>
+              <label class="opt"><input type="radio" name="within_12mo" value="No"> No</label>
+              <label class="opt"><input type="radio" name="within_12mo" value="Not sure"> Not sure</label>
+            </div>
+          </div>
+
+          <div class="q"><span>Do you have a police report? <span class="req">*</span></span>
+            <div class="opts">
+              <label class="opt"><input type="radio" name="police_report" value="Yes" required> Yes</label>
+              <label class="opt"><input type="radio" name="police_report" value="No"> No</label>
+              <label class="opt"><input type="radio" name="police_report" value="Not sure"> Not sure</label>
+            </div>
+          </div>
+
+            <button type="button" class="submit" id="nextBtn">CONTINUE &rarr;</button>
+          </div>
+
+          <div class="fstep" id="step2">
+            <a href="#" class="back-link" id="backLink">&larr; Back to the questions</a>
+            <p class="step-note">Almost done &mdash; where should we reach you?</p>
           <label for="fn">First Name <span class="req">*</span></label>
           <input type="text" id="fn" name="first_name" placeholder="First Name" required>
 
@@ -216,38 +268,6 @@ footer{background:#e9ecf2;padding:26px 20px 30px;font-size:12.5px;color:var(--mu
         <option value="WY">Wyoming</option>
           </select>
 
-          <div class="q"><span>Were you injured in the accident? <span class="req">*</span></span>
-            <div class="opts">
-              <label class="opt"><input type="radio" name="injured" value="Yes" required> Yes</label>
-              <label class="opt"><input type="radio" name="injured" value="No"> No</label>
-              <label class="opt"><input type="radio" name="injured" value="Not sure"> Not sure</label>
-            </div>
-          </div>
-
-          <div class="q"><span>Were you at fault for the accident? <span class="req">*</span></span>
-            <div class="opts">
-              <label class="opt"><input type="radio" name="at_fault" value="Yes" required> Yes</label>
-              <label class="opt"><input type="radio" name="at_fault" value="No"> No</label>
-              <label class="opt"><input type="radio" name="at_fault" value="Not sure"> Not sure</label>
-            </div>
-          </div>
-
-          <div class="q"><span>Did the accident occur within the last 12 months? <span class="req">*</span></span>
-            <div class="opts">
-              <label class="opt"><input type="radio" name="within_12mo" value="Yes" required> Yes</label>
-              <label class="opt"><input type="radio" name="within_12mo" value="No"> No</label>
-              <label class="opt"><input type="radio" name="within_12mo" value="Not sure"> Not sure</label>
-            </div>
-          </div>
-
-          <div class="q"><span>Do you have a police report? <span class="req">*</span></span>
-            <div class="opts">
-              <label class="opt"><input type="radio" name="police_report" value="Yes" required> Yes</label>
-              <label class="opt"><input type="radio" name="police_report" value="No"> No</label>
-              <label class="opt"><input type="radio" name="police_report" value="Not sure"> Not sure</label>
-            </div>
-          </div>
-
           <div class="consent">
             <label class="consent-row">
               <input type="checkbox" id="consent" name="consent_given" value="Yes">
@@ -256,6 +276,7 @@ footer{background:#e9ecf2;padding:26px 20px 30px;font-size:12.5px;color:var(--mu
           </div>
 
           <button type="submit" class="submit" id="submitBtn">GET MY FREE CASE REVIEW &rarr;</button>
+          </div>
           <p class="err" id="errMsg"></p>
           <div class="safe"><svg viewBox="0 0 24 24"><path d="M18 8h-1V6A5 5 0 007 6v2H6a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V10a2 2 0 00-2-2zM9 6a3 3 0 016 0v2H9V6zm3 11a2 2 0 110-4 2 2 0 010 4z"/></svg> Your information is safe and confidential.</div>
         </form>
@@ -322,6 +343,35 @@ document.getElementById('leadForm').addEventListener('input', function(){
   document.getElementById('errMsg').className = 'err';
 });
 
+/* Two steps: the four taps first, contact details second. Nobody is asked
+   for their name and number until they have already answered something —
+   the easy part builds enough commitment to carry them through the part
+   that feels personal. Same nine fields; only the order changes. */
+function showStep(n){
+  document.getElementById('step1').className = 'fstep' + (n===1?' on':'');
+  document.getElementById('step2').className = 'fstep' + (n===2?' on':'');
+  document.getElementById('progBar').style.width = (n===1?50:100) + '%';
+  document.getElementById('progLbl').textContent =
+    n===1 ? 'Step 1 of 2 \u00b7 About the accident' : 'Step 2 of 2 \u00b7 Your contact details';
+  document.getElementById('errMsg').className = 'err';
+}
+
+document.getElementById('nextBtn').addEventListener('click', function(){
+  var f = document.getElementById('leadForm'), err = document.getElementById('errMsg');
+  var unanswered = ['injured','at_fault','within_12mo','police_report']
+    .filter(function(n){ return !f.querySelector('input[name="'+n+'"]:checked'); });
+  if(unanswered.length){
+    err.textContent = 'Please answer all four questions to continue.';
+    err.className = 'err on'; return;
+  }
+  showStep(2);
+  document.getElementById('fn').focus();
+});
+
+document.getElementById('backLink').addEventListener('click', function(e){
+  e.preventDefault(); showStep(1);
+});
+
 function submitLead(e){
   e.preventDefault();
   var f = document.getElementById('leadForm');
@@ -339,7 +389,13 @@ function submitLead(e){
   var email = document.getElementById('em').value.trim();
   var phone = document.getElementById('ph').value.replace(/\D/g,'');
 
-  if(missing.length){ err.textContent = 'Please complete every field marked with a star.'; err.className='err on'; return false; }
+  if(missing.length){
+    /* Send them back to whichever step actually has the gap, rather than
+       showing an error about fields they cannot currently see. */
+    if(missing.some(function(m){ return ['injured','at_fault','within_12mo','police_report'].indexOf(m)!==-1; })) showStep(1);
+    err.textContent = 'Please complete every field marked with a star.';
+    err.className = 'err on'; return false;
+  }
   if(!/^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i.test(email)){ err.textContent = 'That email address does not look right.'; err.className='err on'; return false; }
   if(phone.length < 10){ err.textContent = 'Please enter a full 10 digit phone number.'; err.className='err on'; return false; }
   if(!document.getElementById('consent').checked){
