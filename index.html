@@ -71,6 +71,10 @@ input:focus,select:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 
 .opts{display:flex;gap:16px;flex-wrap:wrap}
 .opt{display:flex;align-items:center;gap:6px;font-size:14.5px;color:var(--ink);cursor:pointer;font-weight:500}
 .opt input{margin:0;width:17px;height:17px;accent-color:var(--navy);cursor:pointer}
+.consent{margin:16px 0 4px;padding-top:14px;border-top:1px solid var(--line)}
+.consent-row{display:flex;gap:10px;align-items:flex-start;cursor:pointer;font-weight:400}
+.consent-row input{margin:2px 0 0;width:19px;height:19px;flex:none;accent-color:var(--navy);cursor:pointer}
+.consent-row span{font-size:11.5px;line-height:1.5;color:var(--muted);font-weight:400}
 .submit{width:100%;background:var(--red);color:#fff;border:0;border-radius:7px;padding:16px;font-size:16px;font-weight:800;letter-spacing:.3px;font-family:inherit;cursor:pointer;margin-top:4px;transition:background .15s}
 .submit:hover{background:var(--red2)}
 .submit:disabled{opacity:.72;cursor:default}
@@ -244,6 +248,13 @@ footer{background:#e9ecf2;padding:26px 20px 30px;font-size:12.5px;color:var(--mu
             </div>
           </div>
 
+          <div class="consent">
+            <label class="consent-row">
+              <input type="checkbox" id="consent" name="consent_given" value="Yes">
+              <span id="consentText">By checking this box I am providing my electronic signature and my express written consent to be contacted by Crash Claim Review, the law firm my information is referred to, and their agents at the telephone number and email address I have provided &mdash; including by automatic telephone dialling system, prerecorded or artificial voice, and text message &mdash; about my potential claim, even if my number is on a Do Not Call list. Consent is not a condition of any purchase or of obtaining legal representation. Message and data rates may apply. I may revoke this consent at any time.</span>
+            </label>
+          </div>
+
           <button type="submit" class="submit" id="submitBtn">GET MY FREE CASE REVIEW &rarr;</button>
           <p class="err" id="errMsg"></p>
           <div class="safe"><svg viewBox="0 0 24 24"><path d="M18 8h-1V6A5 5 0 007 6v2H6a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V10a2 2 0 00-2-2zM9 6a3 3 0 016 0v2H9V6zm3 11a2 2 0 110-4 2 2 0 010 4z"/></svg> Your information is safe and confidential.</div>
@@ -331,6 +342,10 @@ function submitLead(e){
   if(missing.length){ err.textContent = 'Please complete every field marked with a star.'; err.className='err on'; return false; }
   if(!/^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i.test(email)){ err.textContent = 'That email address does not look right.'; err.className='err on'; return false; }
   if(phone.length < 10){ err.textContent = 'Please enter a full 10 digit phone number.'; err.className='err on'; return false; }
+  if(!document.getElementById('consent').checked){
+    err.textContent = 'Please tick the box to agree to be contacted about your claim.';
+    err.className = 'err on'; return false;
+  }
 
   var btn = document.getElementById('submitBtn');
   btn.disabled = true; btn.textContent = 'Sending...';
@@ -342,6 +357,11 @@ function submitLead(e){
   fd.set('xxTrustedFormCertUrl', (document.getElementById('xxTrustedFormCertUrl')||{}).value || '');
   fd.append('lead_secret', LEAD_SECRET);
   fd.append('page', 'crashclaimreview.com');
+  /* Store the consent wording that was actually on screen, not just that a box
+     was ticked. If the text is ever revised, old leads still carry the version
+     the visitor agreed to — which is the only version that matters later. */
+  fd.set('consent_given', 'Yes');
+  fd.append('consent_text', (document.getElementById('consentText')||{}).textContent || '');
   /* Carry the ad parameters through so you can tell which ad produced which lead. */
   new URLSearchParams(location.search).forEach(function(v,k){ fd.append(k, v); });
 

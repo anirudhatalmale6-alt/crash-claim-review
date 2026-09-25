@@ -84,6 +84,9 @@ var FIELDS = [
   'utm_meta_ad_id','utm_meta_adset_id','utm_meta_campaign_id',
   'utm_placement','utm_adset','utm_whop','wacid','wasid','waid','fbclid','gclid',
 
+  /* Consent: whether the box was ticked, and the exact wording it sat beside. */
+  'consent_given','consent_text',
+
   /* TrustedForm consent certificate. New fields go on the END of this list —
      the header repair below inserts missing columns just before the two
      bookkeeping columns, so anything added in the middle would shift data
